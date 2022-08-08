@@ -1,6 +1,20 @@
-## Welcome
+### "At its heart, engineering is about using science to find creative, practical solutions." 
+Queen Elizabeth II
 
-"At its heart, engineering is about using science to find creative, practical solutions." `- Queen Elizabeth II`
+# Engineering
+
+There are many diciplines in the world of engineering, but for me, the most important are:
+
+<style type="text/css">
+  h1 {
+    border: 1px solid black;
+  }
+</style>
+
+# Electrical 
+# Mechanical 
+
+
 
 You can use the [editor on GitHub](https://github.com/TheBengineer/TheBengineer.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
 
