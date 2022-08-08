@@ -81,13 +81,10 @@ main {
     .Venn>div {
       box-sizing: border-box;
       border: 0.1em solid rgba(0, 0, 0, 0.5);
-      font-size: calc(2.5vw * var(--venn-width-mult));
-      line-height: 1.3;
       overflow: hidden;
     }
 
     .Venn>.shape {
-      font-size: calc(2.25vw * var(--venn-width-mult));
       border: initial;
       width: initial;
       margin: initial;
