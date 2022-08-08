@@ -1,6 +1,4 @@
-<center> 
-# The Three Pillars Of Engineering 
-</center>
+<center><h1> The Three Pillars Of Engineering </h1></center>
 
 <link rel="stylesheet" href="/venn.css">
 
