@@ -1,12 +1,9 @@
 ### "At its heart, engineering is about using science to find creative, practical solutions." 
 Queen Elizabeth II
 
-# Engineering
+# The Three Pillars Of Engineering
 
 <link rel="stylesheet" href="/venn.css">
-
-
-There are many diciplines in the world of engineering, but for me the three pillars of our moderns world are
 
 
 <article class="Venn">
