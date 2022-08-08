@@ -3,7 +3,8 @@ Queen Elizabeth II
 
 # Engineering
 
-{% include venn.html %}
+<link rel="stylesheet" href="/venn.css">
+
 
 There are many diciplines in the world of engineering, but for me, the most important are:
 
