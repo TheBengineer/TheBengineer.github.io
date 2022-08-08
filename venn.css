@@ -176,7 +176,7 @@ main {
      shape-outside: polygon(100% 0%, 90% 15%, 70% 35%, 50% 50%, 5% 70%, 0% 100%, 100% 100%);
 }
  .Venn .circle h1, .Venn .circle h2, .Venn .circle h3 {
-     margin: 0.5em 0 0 0;
+     margin: 1em 0 0 0;
      text-align: center;
 }
 
