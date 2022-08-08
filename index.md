@@ -5,7 +5,7 @@ Queen Elizabeth II
 
 <link rel="stylesheet" href="/venn.css">
 
-
+<main>
 <article class="Venn">
   <div class="circle one">
     <span></span>
@@ -50,7 +50,7 @@ Queen Elizabeth II
     <p></p>
   </div>
 </article>
-
+</main>
 
 # Electrical 
 # Mechanical 
