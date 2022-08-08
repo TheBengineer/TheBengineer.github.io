@@ -181,7 +181,7 @@ main {
      margin-top: 0.2em;
 }
 
-.Venn .shape h1 {
+.Venn .shape h1, .Venn .shape h2, .Venn .shape h3 {
      clip-path: inset(100%);
      clip: rect(1px, 1px, 1px, 1px);
      height: 1px;
