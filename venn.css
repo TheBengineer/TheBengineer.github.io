@@ -175,14 +175,13 @@ main {
      float: right;
      shape-outside: polygon(100% 0%, 90% 15%, 70% 35%, 50% 50%, 5% 70%, 0% 100%, 100% 100%);
 }
- .Venn .circle h3 {
+ .Venn .circle h1, .Venn .circle h2, .Venn .circle h3 {
      margin: 0.5em 0 0 0;
      text-align: center;
-}
- .Venn .circle h3+* {
      margin-top: 0.2em;
 }
- .Venn .shape h3 {
+
+.Venn .shape h1 {
      clip-path: inset(100%);
      clip: rect(1px, 1px, 1px, 1px);
      height: 1px;
