@@ -11,7 +11,9 @@ main {
 
 
  .Venn {
-     display: none;
+     display: none;     
+     aspect-ratio: 1.2;
+
 }
  .Venn>div {
      box-sizing: border-box;
