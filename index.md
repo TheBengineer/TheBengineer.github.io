@@ -31,25 +31,25 @@ There are many diciplines in the world of engineering, but for me the three pill
   <div class="shape onetwo">
     <span></span>
     <span></span>
-    <h3>One + Two</h3>
+    <h3>SW + EL</h3>
     <p></p>
   </div>
   <div class="shape onethree">
     <span></span>
     <span></span>
-    <h3>One + Three</h3>
+    <h3>SW + MEC</h3>
     <p> </p>
   </div>
   <div class="shape twothree">
     <span></span>
     <span></span>
-    <h3>Two + Three</h3>
+    <h3>EL + MEC</h3>
     <p> </p>
   </div>
   <div class="shape onetwothree">
     <span></span>
     <span></span>
-    <h3>One + Two + Three</h3>
+    <h3>All</h3>
     <p></p>
   </div>
 </article>
