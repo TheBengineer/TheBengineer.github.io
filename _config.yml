@@ -2,3 +2,5 @@ theme: jekyll-theme-hacker
 title: TheBengineer
 description: Systems Engineer
 show_downloads: false
+github:
+  url: https://thebengineer.github.io/
