@@ -1,6 +1,3 @@
-### "At its heart, engineering is about using science to find creative, practical solutions." 
-Queen Elizabeth II
-
 # The Three Pillars Of Engineering
 
 <link rel="stylesheet" href="/venn.css">
@@ -51,10 +48,6 @@ Queen Elizabeth II
   </div>
 </article>
 </main>
-
-# Electrical 
-# Mechanical 
-
 
 
 You can use the [editor on GitHub](https://github.com/TheBengineer/TheBengineer.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
