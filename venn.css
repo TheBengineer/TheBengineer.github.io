@@ -5,7 +5,7 @@ main {
   }
 
   :root {
-    --venn-width-mult: 0.9;
+    --venn-width-mult: 0.5;
   }
 
   @media print {
