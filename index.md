@@ -1,11 +1,3 @@
-### "At its heart, engineering is about using science to find creative, practical solutions." 
-Queen Elizabeth II
-
-# Engineering
-
-There are many diciplines in the world of engineering, but for me, the most important are:
-
-
 <style type="text/css">
 main {
   /*  outline: 1px dotted #ccc; */
@@ -25,7 +17,7 @@ main {
 
 /* Defaults for browsers that do not support shape-outside */
 @media (min-width: 800px) {
-  .Venn2::after {
+  .Venn::after {
     content: "";
     display: block;
     width: 1px;
@@ -40,35 +32,54 @@ main {
     margin: 0 0.75%;
     padding: 0 1.5em;
     float: left;
-    width: 48%;
+    width: 32%;
   }
 
   .circle.one {
     margin-left: 0;
   }
 
-  .circle.two {
+  .circle.three {
     margin-right: 0;
   }
 
   .shape {
-    width: 60%;
-    margin: 1em 18.75%;
+    width: 30%;
+    margin: 1em 1%;
   }
 
   .shape.onetwo {
+    margin-left: 2.5%;
     clear: left;
-    border-top-left-radius: 1em;
     border-top-right-radius: 1em;
+  }
+
+  .shape.twothree {
+    margin-right: 2.5%;
+    border-top-left-radius: 1em;
+  }
+
+  .shape.onethree {
+    margin-top: 3em;
+    border-top-right-radius: 1em;
+    border-top-left-radius: 1em;
+  }
+
+  .shape.onetwothree {
+    clear: both;
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+    border-radius: 1.5em;
   }
 }
 
 @supports (shape-outside: polygon(0 0, 0 50%, 50% 50%)) {
-  .Venn2::after {
+  .Venn::after {
     display: none;
   }
 
-  .Venn2 > div {
+  .Venn > div {
     box-sizing: border-box;
     border: 0.1em solid rgba(0, 0, 0, 0.5);
     font-size: calc(2.5vw * var(--venn-width-mult));
@@ -76,7 +87,7 @@ main {
     overflow: hidden;
   }
 
-  .Venn2 > .shape {
+  .Venn > .shape {
     font-size: calc(2.25vw * var(--venn-width-mult));
     border: initial;
     width: initial;
@@ -84,7 +95,7 @@ main {
     padding: initial;
   }
 
-  .Venn2 > .circle {
+  .Venn > .circle {
     border-radius: 50%;
     width: initial;
     margin: initial;
@@ -92,192 +103,354 @@ main {
   }
 
   /* Grid layout  */
-  .Venn2 {
+  .Venn {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, calc(32vw * var(--venn-width-mult)));
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, calc(28.8vw * var(--venn-width-mult)));
   }
 
-  .Venn2 > h2 {
+  .Venn > h2 {
     grid-column-start: 1;
     grid-column-end: 6;
     grid-row-start: 0;
     grid-row-end: 1;
   }
 
-  .Venn2 > .circle.one {
+  .Venn > .circle.one {
     /*   outline: .2em solid #f00; */
     grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 3;
-  }
-
-  .Venn2 > .circle.two {
-    /*   outline: .2em solid #0f0; */
-    grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 3;
   }
 
-  .Venn2 > .shape.onetwo {
-    /*   outline: .2em solid #ff0; */
-    grid-column-start: 2;
-    grid-column-end: 3;
+  .Venn > .circle.two {
+    /*   outline: .2em solid #0f0; */
+    grid-column-start: 3;
+    grid-column-end: 6;
     grid-row-start: 1;
     grid-row-end: 3;
   }
 
+  .Venn > .circle.three {
+    /*   outline: .2em solid #00f; */
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 4;
+  }
+
+  .Venn > .shape.onetwo {
+    /*   outline: .2em solid #ff0; */
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+
+  .Venn > .shape.onethree {
+    /*   outline: .2em solid #f0f; */
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 2;
+  }
+
+  .Venn > .shape.twothree {
+    /*   outline: .2em solid #0ff; */
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 2;
+  }
+
+  .Venn > .shape.onetwothree {
+    /*   outline: .2em solid #fff; */
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
+  }
+
   /* Text wrap */
-  .Venn2 .circle,
-  .Venn2 .shape {
+  .Venn .circle,
+  .Venn .shape {
     text-align: center;
   }
-  .Venn2 .circle span,
-  .Venn2 .shape span {
+  .Venn .circle span,
+  .Venn .shape span {
     box-sizing: border-box;
     float: right;
     /*     border: 1px dotted #00f;
     background-color: rgba(0,0,0,.1); */
   }
-  .Venn2 .circle > span,
-  .Venn2 .shape > span {
-    width: calc(64vw * var(--venn-width-mult));
-    height: calc(64vw * var(--venn-width-mult));
+  .Venn .circle > span {
+    width: calc(58.5vw * var(--venn-width-mult));
+    height: calc(58.5vw * var(--venn-width-mult));
   }
-  .Venn2 .one > span {
+  .Venn .shape > span {
+    height: calc(29vw * var(--venn-width-mult));
+  }
+  .Venn .one > span {
     float: left;
-    width: 48%;
+    width: 32%;
     shape-margin: 0;
     shape-outside: polygon(
       100% 0%,
       0% 0%,
       0% 100%,
       100% 100%,
-      75% 96%,
-      47% 90%,
-      25% 80%,
-      12% 70%,
-      5% 60%,
-      3% 50%,
-      5% 40%,
-      12% 30%,
-      25% 20%,
-      47% 10%,
-      75% 4%
+      100% 92%,
+      76% 88%,
+      44% 80%,
+      20% 70%,
+      10% 60%,
+      5% 50%,
+      10% 40%,
+      20% 30%,
+      41% 20%,
+      70% 10%,
+      100% 5%
     );
   }
-  .Venn2 .one > span + span {
+  .Venn .one > span + span {
     float: right;
-    width: 52%;
+    width: 66%;
     shape-outside: polygon(
       100% 0%,
-      20% 0%,
-      40% 7%,
-      26% 15%,
-      12% 25%,
-      5% 35%,
-      1% 45%,
-      0% 50%,
-      1% 55%,
-      5% 65%,
-      12% 75%,
-      26% 85%,
-      40% 93%,
-      20% 100%,
+      40% 0%,
+      65% 15%,
+      53% 25%,
+      47% 35%,
+      44% 45%,
+      43% 50%,
+      31% 55%,
+      12% 65%,
+      5% 75%,
+      0% 85%,
+      0% 100%,
       100% 100%
     );
   }
-  .Venn2 .two > span {
+  .Venn .two > span {
     float: left;
-    width: 52%;
+    width: 66%;
     shape-margin: 0;
     shape-outside: polygon(
       0% 0%,
-      80% 0%,
-      60% 7%,
-      74% 15%,
-      88% 25%,
-      95% 35%,
-      99% 45%,
-      100% 50%,
-      99% 55%,
-      95% 65%,
-      88% 75%,
-      74% 85%,
-      60% 93%,
-      80% 100%,
+      60% 0%,
+      35% 15%,
+      47% 25%,
+      53% 35%,
+      56% 45%,
+      57% 50%,
+      69% 55%,
+      88% 65%,
+      95% 75%,
+      100% 85%,
+      100% 100%,
       0% 100%
     );
   }
-  .Venn2 .two > span + span {
+  .Venn .two > span + span {
     float: right;
-    width: 48%;
+    width: 32%;
     shape-outside: polygon(
       0% 0%,
       100% 0%,
       100% 100%,
       0% 100%,
-      25% 96%,
-      53% 90%,
-      75% 80%,
-      88% 70%,
-      95% 60%,
-      97% 50%,
-      95% 40%,
-      88% 30%,
-      75% 20%,
-      53% 10%,
-      25% 4%
+      0% 92%,
+      24% 88%,
+      56% 80%,
+      80% 70%,
+      90% 60%,
+      95% 50%,
+      90% 40%,
+      80% 30%,
+      59% 20%,
+      30% 10%,
+      0% 5%
     );
   }
-  .Venn2 .onetwo > span {
+  .Venn .three > span {
     float: left;
     width: 49%;
     shape-margin: 0;
     shape-outside: polygon(
       0% 0%,
       100% 0%,
-      100% 10%,
-      70% 15%,
-      36% 25%,
-      18% 35%,
-      7% 50%,
-      18% 65%,
-      36% 75%,
-      70% 85%,
-      100% 90%,
+      100% 40%,
+      75% 47%,
+      50% 50%,
+      2% 50%,
+      5% 60%,
+      13% 70%,
+      27% 80%,
+      52% 90%,
+      78% 95%,
+      100% 97%,
       100% 100%,
       0% 100%
     );
   }
-  .Venn2 .onetwo > span + span {
+  .Venn .three > span + span {
     float: right;
     shape-outside: polygon(
       100% 0%,
       0% 0%,
-      0% 10%,
-      30% 15%,
-      64% 25%,
-      82% 35%,
-      97% 50%,
-      83% 65%,
-      64% 75%,
-      30% 85%,
+      0% 40%,
+      25% 47%,
+      50% 50%,
+      98% 50%,
+      95% 60%,
+      87% 70%,
+      73% 80%,
+      48% 90%,
+      22% 95%,
+      0% 97%,
+      0% 100%,
+      100% 100%
+    );
+  }
+  .Venn .onetwo > span {
+    float: left;
+    width: 49%;
+    shape-margin: 0;
+    shape-outside: polygon(
+      0% 0%,
+      100% 0%,
+      100% 30%,
+      72% 40%,
+      48% 50%,
+      20% 70%,
+      10% 85%,
+      0% 98%,
+      100% 98%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  .Venn .onetwo > span + span {
+    float: right;
+    shape-outside: polygon(
+      100% 0%,
+      0% 0%,
+      0% 30%,
+      28% 40%,
+      52% 50%,
+      80% 70%,
+      90% 85%,
+      100% 98%,
+      0% 98%,
+      0% 100%,
+      100% 100%
+    );
+  }
+  .Venn .onethree > span {
+    float: left;
+    width: 48%;
+    shape-margin: 0;
+    shape-outside: polygon(
+      0% 0%,
+      100% 0%,
+      100% 5%,
+      70% 20%,
+      45% 35%,
+      26% 50%,
+      10% 75%,
+      5% 90%,
+      50% 98%,
+      100% 95%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  .Venn .onethree > span + span {
+    float: right;
+    width: 51%;
+    shape-outside: polygon(
+      100% 0%,
+      0% 0%,
+      0% 25%,
+      9% 40%,
+      20% 55%,
+      40% 70%,
+      30% 80%,
       0% 90%,
       0% 100%,
       100% 100%
     );
   }
-  .Venn2 .circle h3 {
+  .Venn .twothree > span {
+    float: left;
+    width: 51%;
+    shape-margin: 0;
+    shape-outside: polygon(
+      0% 0%,
+      100% 0%,
+      100% 25%,
+      91% 40%,
+      80% 55%,
+      60% 70%,
+      70% 80%,
+      100% 90%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  .Venn .twothree > span + span {
+    float: right;
+    width: 48%;
+    shape-outside: polygon(
+      100% 0%,
+      0% 0%,
+      0% 5%,
+      30% 20%,
+      55% 35%,
+      74% 50%,
+      90% 75%,
+      95% 90%,
+      50% 98%,
+      0% 95%,
+      0% 100%,
+      100% 100%
+    );
+  }
+  .Venn .onetwothree > span {
+    float: left;
+    width: 49%;
+    shape-margin: 0;
+    shape-outside: polygon(
+      0% 0%,
+      10% 15%,
+      30% 35%,
+      50% 50%,
+      95% 70%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  .Venn .onetwothree > span + span {
+    float: right;
+    shape-outside: polygon(
+      100% 0%,
+      90% 15%,
+      70% 35%,
+      50% 50%,
+      5% 70%,
+      0% 100%,
+      100% 100%
+    );
+  }
+  .Venn .circle h3 {
     margin: 0.5em 0 0 0;
     text-align: center;
   }
-  .Venn2 .circle h3 + * {
+  .Venn .circle h3 + * {
     margin-top: 0.2em;
   }
-  .Venn2 .shape h3 {
+  .Venn .shape h3 {
     clip-path: inset(100%);
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
@@ -289,26 +462,44 @@ main {
 }
 
 /* Show the boxes */
-.Venn2.guides > .circle.one {
+.Venn.guides > .circle.one {
   outline: 0.2em solid #f00;
 }
-.Venn2.guides > .circle.two {
+.Venn.guides > .circle.two {
   outline: 0.2em solid #0f0;
 }
-.Venn2.guides > .shape.onetwo {
+.Venn.guides > .circle.three {
+  outline: 0.2em solid #00f;
+}
+.Venn.guides > .shape.onetwo {
   outline: 0.2em solid #ff0;
 }
-.Venn2.guides .circle span,
-.Venn2.guides .shape span {
+.Venn.guides > .shape.onethree {
+  outline: 0.2em solid #f0f;
+}
+.Venn.guides > .shape.twothree {
+  outline: 0.2em solid #0ff;
+}
+.Venn.guides > .shape.onetwothree {
+  outline: 0.2em solid #fff;
+}
+.Venn.guides .circle span,
+.Venn.guides .shape span {
   border: 1px dotted #000;
   background-color: rgba(0, 0, 0, 0.1);
 }
-.Venn2.guides > div {
+.Venn.guides > div {
   border: 0.1em solid rgba(0, 0, 0, 0.5);
 }
 </style>
 
-<article class="Venn2">
+
+
+
+
+
+
+<article class="Venn">
     <h2>Stock Model</h2>
     <div class="circle one">
       <span></span>
@@ -328,6 +519,15 @@ main {
         ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
       </p>
     </div>
+    <div class="circle three">
+      <span></span>
+      <span></span>
+      <h3>Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis
+        ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
+      </p>
+    </div>
     <div class="shape onetwo">
       <span></span>
       <span></span>
@@ -337,45 +537,92 @@ main {
         ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
       </p>
     </div>
+    <div class="shape onethree">
+      <span></span>
+      <span></span>
+      <h3>One + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
+    <div class="shape twothree">
+      <span></span>
+      <span></span>
+      <h3>Two + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
+    <div class="shape onetwothree">
+      <span></span>
+      <span></span>
+      <h3>One + Two + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
   </article>
-
-# Electrical 
-# Mechanical 
-
-
-
-You can use the [editor on GitHub](https://github.com/TheBengineer/TheBengineer.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/TheBengineer/TheBengineer.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+  
+  <article class="Venn guides">
+    <h2>Showing Boxes</h2>
+    <div class="circle one">
+      <span></span>
+      <span></span>
+      <h3>One</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis
+        ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
+      </p>
+    </div>
+    <div class="circle two">
+      <span></span>
+      <span></span>
+      <h3>Two</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis
+        ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
+      </p>
+    </div>
+    <div class="circle three">
+      <span></span>
+      <span></span>
+      <h3>Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis
+        ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
+      </p>
+    </div>
+    <div class="shape onetwo">
+      <span></span>
+      <span></span>
+      <h3>One + Two</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis
+        ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis.
+      </p>
+    </div>
+    <div class="shape onethree">
+      <span></span>
+      <span></span>
+      <h3>One + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
+    <div class="shape twothree">
+      <span></span>
+      <span></span>
+      <h3>Two + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
+    <div class="shape onetwothree">
+      <span></span>
+      <span></span>
+      <h3>One + Two + Three</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis.
+      </p>
+    </div>
+  </article>
