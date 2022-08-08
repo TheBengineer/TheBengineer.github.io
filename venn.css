@@ -178,7 +178,6 @@ main {
  .Venn .circle h1, .Venn .circle h2, .Venn .circle h3 {
      margin: 0.5em 0 0 0;
      text-align: center;
-     margin-top: 0.2em;
 }
 
 .Venn .shape h1, .Venn .shape h2, .Venn .shape h3 {
