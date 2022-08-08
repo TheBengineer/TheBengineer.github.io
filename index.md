@@ -6,33 +6,33 @@ Queen Elizabeth II
 <link rel="stylesheet" href="/venn.css">
 
 
-There are many diciplines in the world of engineering, but for me, the most important are:
+There are many diciplines in the world of engineering, but for me the three pillars of our moderns world are
 
 
 <article class="Venn">
   <div class="circle one">
     <span></span>
     <span></span>
-    <h2>Software</h2>
-    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis. </p>
+    <h1>Software</h1>
+    <p></p>
   </div>
   <div class="circle two">
     <span></span>
     <span></span>
-    <h2>Electrical</h2>
-    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis. </p>
+    <h1>Electrical</h1>
+    <p></p>
   </div>
   <div class="circle three">
     <span></span>
     <span></span>
-    <h2>Mechanical</h2>
-    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis. </p>
+    <h1>Mechanical</h1>
+    <p></p>
   </div>
   <div class="shape onetwo">
     <span></span>
     <span></span>
     <h3>One + Two</h3>
-    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras iaculis magna erat, eget condimentum metus faucibus eget. Sed venenatis sem dui, quis faucibus nibh pretium a. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada mattis ligula, a vulputate nibh porttitor eu. Morbi tempus dolor sed lectus gravida, id convallis ipsum convallis. Cras nec pharetra est, nec finibus lectus. Donec pulvinar ipsum arcu, sit amet pulvinar augue luctus quis. </p>
+    <p></p>
   </div>
   <div class="shape onethree">
     <span></span>
