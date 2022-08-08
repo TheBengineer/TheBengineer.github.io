@@ -96,11 +96,10 @@ main {
      float: right;
 }
  .Venn .circle>span {
-     width: 50%;
-     height: 50%;
+     height: 100%;
 }
  .Venn .shape>span {
-     height: 30%;
+     height: 100%;
 }
  .Venn .one>span {
      float: left;
