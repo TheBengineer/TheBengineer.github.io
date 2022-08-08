@@ -39,7 +39,7 @@ main {
      grid-template-columns: repeat(5, 1fr);
      grid-template-rows: repeat(3, 28%);
 }
- .Venn>h2 {
+ .Venn h1, .Venn h2, .Venn h3 {
      grid-column-start: 1;
      grid-column-end: 6;
      grid-row-start: 0;
