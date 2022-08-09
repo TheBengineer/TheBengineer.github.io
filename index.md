@@ -27,7 +27,7 @@
     <span></span>
     <h1>Mechanical</h1>
     <p>
-      <a href="https://imgur.com/a/cPtIk">Jeep Wrangler Rebuild</a>
+      <a href="https://imgur.com/a/cPtIk">1993 Jeep Wrangler Rebuild</a>
     </p>
   </div>
   <div class="shape onetwo">
