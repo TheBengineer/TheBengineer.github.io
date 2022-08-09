@@ -9,9 +9,11 @@
     <span></span>
     <h1>Software</h1>
     <p>
-      <a src="https://github.com/TheBengineer/nix-dependency-visualizer">- Nix Dependency Visualizer</a>
-      <a src="https://github.com/TheBengineer/GmusicExport">- Google Music Extractor</a>
-      <a src="https://github.com/TheBengineer/PyVT100">- VT100 Emulator</a>
+      <a src="https://github.com/TheBengineer/nix-dependency-visualizer">Nix Dependency Visualizer</a>
+      <br>
+      <a src="https://github.com/TheBengineer/GmusicExport">Google Music Extractor</a>
+      <br>
+      <a src="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
     </p>
   </div>
   <div class="circle two">
@@ -53,11 +55,11 @@
 </article>
 </main>
 
-```Markdown
+
 # projects
 
 - [Nix Dependency Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
 - [Google Music Extractor](https://github.com/TheBengineer/GmusicExport)
 - [Bridge Tester](https://github.com/TheBengineer/Bridge-Tester)
 - [VT 100 Emulator](https://github.com/TheBengineer/PyVT100)
-```
+
