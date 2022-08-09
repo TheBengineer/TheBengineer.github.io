@@ -9,11 +9,11 @@
     <span></span>
     <h1>Software</h1>
     <p>
-      <a src="https://github.com/TheBengineer/nix-dependency-visualizer">Nix Dependency Visualizer</a>
+      <a href="https://github.com/TheBengineer/nix-dependency-visualizer">Nix Dependency Visualizer</a>
       <br>
-      <a src="https://github.com/TheBengineer/GmusicExport">Google Music Extractor</a>
+      <a href="https://github.com/TheBengineer/GmusicExport">Google Music Extractor</a>
       <br>
-      <a src="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
+      <a href="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
     </p>
   </div>
   <div class="circle two">
@@ -50,7 +50,7 @@
     <span></span>
     <span></span>
     <h3>All</h3>
-    <p><a src="https://github.com/TheBengineer/Bridge-Tester">Bridge Tester</a></p>
+    <p><a href="https://github.com/TheBengineer/Bridge-Tester">Bridge Tester</a></p>
   </div>
 </article>
 </main>
