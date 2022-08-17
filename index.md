@@ -30,7 +30,7 @@ $ ./thebengineer -s --help SmartFounders.io
       <br>
       <a href="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
       <br>
-      <a href="http://app.smartfounders.io/">SmartFounders</a>
+      <a href="http://app.smartfounders.io/">SmartFounders.io</a>
     </p>
   </div>
   <div class="circle two">
