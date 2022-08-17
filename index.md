@@ -7,10 +7,9 @@ Usage: thebengineer [OPTION...] PROJECT
 
 Examples:
 
-$ ./thebengineer -s -e -m <a href="https://github.com/TheBengineer/Bridge-Tester">Bridge_Tester</a>
-$ ./thebengineer -s <a href="https://github.com/TheBengineer/nix-dependency-visualizer">Nix_Dependency_Visualizer</a>
-$ ./thebengineer -s <a href="https://github.com/TheBengineer/GmusicExport">Google_Music_Extractor</a>
-$ ./thebengineer -s <a href="https://github.com/TheBengineer/PyVT100">VT_100_Emulator</a>
+$ ./thebengineer -s -e -m Bridge_Tester
+$ ./thebengineer -s Google_Music_Extractor
+$ ./thebengineer -s --help SmartFounders.io
 
 ```
 
@@ -30,6 +29,8 @@ $ ./thebengineer -s <a href="https://github.com/TheBengineer/PyVT100">VT_100_Emu
       <a href="https://github.com/TheBengineer/GmusicExport">Google Music Extractor</a>
       <br>
       <a href="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
+      <br>
+      <a href="http://app.smartfounders.io/">SmartFounders</a>
     </p>
   </div>
   <div class="circle two">
