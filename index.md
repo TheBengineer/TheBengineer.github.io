@@ -7,13 +7,12 @@ Usage: thebengineer [OPTION...] PROJECT
 
 Examples:
 
-$ ./thebengineer -s -e -m [Bridge_Tester](https://github.com/TheBengineer/Bridge-Tester)
-$ ./thebengineer -s [Nix_Dependency_Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
-$ ./thebengineer -s [Google_Music_Extractor](https://github.com/TheBengineer/GmusicExport)
-$ ./thebengineer -s [VT_100_Emulator](https://github.com/TheBengineer/PyVT100)
+$ ./thebengineer -s -e -m <a href="https://github.com/TheBengineer/Bridge-Tester">Bridge_Tester</a>
+$ ./thebengineer -s <a href="https://github.com/TheBengineer/nix-dependency-visualizer">Nix_Dependency_Visualizer</a>
+$ ./thebengineer -s <a href="https://github.com/TheBengineer/GmusicExport">Google_Music_Extractor</a>
+$ ./thebengineer -s <a href="https://github.com/TheBengineer/PyVT100">VT_100_Emulator</a>
 
 ```
-
 
 <center><h1> The Three Pillars Of Engineering </h1></center>
 
