@@ -1,18 +1,18 @@
-# Usage: thebengineer [OPTION...] PROJECT
+```
+Usage: thebengineer [OPTION...] PROJECT
+ -s, --software:         Enables software optimization on project
+ -e, --electrical:       Enables electrical optimization on project
+ -m, --mechanical:       Enables mechanical optimization on project
+ --help:                 Enables project management on project
 
-### -s, --software:         Enables software optimization on project
-### -e, --electrical:       Enables electrical optimization on project
-### -m, --mechanical:       Enables mechanical optimization on project
-### --help:                 Enables project management on project
+Examples:
 
-# Examples:
+$ ./thebengineer -s -e -m [Bridge_Tester](https://github.com/TheBengineer/Bridge-Tester)
+$ ./thebengineer -s [Nix_Dependency_Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
+$ ./thebengineer -s [Google_Music_Extractor](https://github.com/TheBengineer/GmusicExport)
+$ ./thebengineer -s [VT_100_Emulator](https://github.com/TheBengineer/PyVT100)
 
-### $ ./thebengineer -s -e -m [Bridge_Tester](https://github.com/TheBengineer/Bridge-Tester)
-### $ ./thebengineer -s [Nix_Dependency_Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
-### $ ./thebengineer -s [Google_Music_Extractor](https://github.com/TheBengineer/GmusicExport)
-### $ ./thebengineer -s [VT_100_Emulator](https://github.com/TheBengineer/PyVT100)
-
-
+```
 
 
 <center><h1> The Three Pillars Of Engineering </h1></center>
