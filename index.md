@@ -1,3 +1,20 @@
+# Usage: thebengineer [OPTION...] PROJECT
+
+### -s, --software:         Enables software optimization on project
+### -e, --electrical:       Enables electrical optimization on project
+### -m, --mechanical:       Enables mechanical optimization on project
+### --help:                 Enables project management on project
+
+# Examples:
+
+### $ ./thebengineer -s -e -m [Bridge_Tester](https://github.com/TheBengineer/Bridge-Tester)
+### $ ./thebengineer -s [Nix_Dependency_Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
+### $ ./thebengineer -s [Google_Music_Extractor](https://github.com/TheBengineer/GmusicExport)
+### $ ./thebengineer -s [VT_100_Emulator](https://github.com/TheBengineer/PyVT100)
+
+
+
+
 <center><h1> The Three Pillars Of Engineering </h1></center>
 
 <link rel="stylesheet" href="/venn.css">
@@ -58,10 +75,5 @@
 </main>
 
 
-# projects
 
-- [Nix Dependency Visualizer](https://github.com/TheBengineer/nix-dependency-visualizer)
-- [Google Music Extractor](https://github.com/TheBengineer/GmusicExport)
-- [Bridge Tester](https://github.com/TheBengineer/Bridge-Tester)
-- [VT 100 Emulator](https://github.com/TheBengineer/PyVT100)
 
