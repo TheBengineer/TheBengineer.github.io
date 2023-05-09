@@ -4,7 +4,6 @@ width: auto !important;  /* Firefox will set width as auto */
 }
 
 main {
-    width: 80%;
     margin: 0 auto;
     line-height: 1em;
   }
