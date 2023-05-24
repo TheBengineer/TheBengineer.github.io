@@ -63,7 +63,7 @@ $ ./thebengineer -s --help SmartFounders.io
     <span></span>
     <span></span>
     <h3>EL + MEC</h3>
-    <p> </p>
+    <p></p>
   </div>
   <div class="shape onetwothree">
     <span></span>
