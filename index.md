@@ -1,3 +1,8 @@
+---
+layout: post
+title: TheBengineer - Systems Engineer
+---
+
 ```
 Usage: thebengineer [OPTION...] PROJECT
  -s, --software:         Enables software optimization on project
