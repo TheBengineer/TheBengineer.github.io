@@ -1,6 +1,8 @@
-theme: jekyll-theme-hacker
+remote_theme: pages-themes/hacker@v0.2.0
 title: TheBengineer
 description: Systems Engineer
 show_downloads: false
 github:
   repository_url: https://github.com/TheBengineer
+plugins:
+- jekyll-remote-theme
