@@ -2,7 +2,6 @@
 layout: post
 ---
 
-
 ```
 Usage: thebengineer [OPTION...] PROJECT
  -s, --software:         Enables software optimization on project
@@ -36,6 +35,8 @@ $ ./thebengineer -s --help SmartFounders.io
       <a href="https://github.com/TheBengineer/PyVT100">VT100 Emulator</a>
       <br>
       <a href="http://app.smartfounders.io/">SmartFounders.io</a>
+      <br>
+      <a href="https://github.com/TheBengineer/MeshHardware">MeshHardware</a>
     </p>
   </div>
   <div class="circle two">
@@ -76,7 +77,7 @@ $ ./thebengineer -s --help SmartFounders.io
     <h3>All</h3>
     <p><a href="https://github.com/TheBengineer/Bridge-Tester">Bridge Tester</a></p>
     <p><a href="https://github.com/TheBengineer/BottleWarmer">BottleWarmer</a></p>
-   
+
   </div>
 </article>
 </main>
