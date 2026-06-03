@@ -37,6 +37,8 @@ $ ./thebengineer -s --help SmartFounders.io
       <a href="http://app.smartfounders.io/">SmartFounders.io</a>
       <br>
       <a href="https://meshhardware.thebengineer.net/">MeshHardware</a>
+      <br>
+      <a href="https://typer.thebengineer.net/">TypeTeacher</a>
     </p>
   </div>
   <div class="circle two">
