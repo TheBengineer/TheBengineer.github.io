@@ -216,21 +216,6 @@
       ctx.fill();
     }
 
-    /* labels — beside each dot, flipped to the left near the right edge */
-    for (var l = 0; l < views.length; l++) {
-      var lv = views[l], lp = lv.ref;
-      ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
-      var labelX = lv.x + 8;
-      ctx.textAlign = "left";
-      if (labelX + ctx.measureText(lp.name).width > W - 6) {
-        ctx.textAlign = "right";
-        labelX = lv.x - 8;
-      }
-      var alphaL = 0.45 + 0.40 * lp.maxAxis;
-      ctx.fillStyle = "rgba(" + FG + ", " + alphaL.toFixed(3) + ")";
-      ctx.fillText(lp.name, labelX, lv.y + 3.5);
-    }
-
     /* hover hit test */
     hover = -1;
     var best = 14;
@@ -242,9 +227,83 @@
         hover = h;
       }
     }
+    var active = linkHover > -1 ? linkHover : hover;
+
+    /* labels — callout style: standoff layout so labels never overlap,
+       with a colored leader line back to the dot when one had to move. */
+    ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+    var LH = 12, LP = 2;
+
+    /* reserve space around the big corner labels */
+    var boxes = [];
+    for (var cl = 0; cl < 3; cl++) {
+      var clab = CORNER_LABEL[cl];
+      var clw = ctx.measureText(AXIS[cl].toUpperCase()).width;
+      var clx = clab.align === "right" ? clab.pos[0] + clab.dx - clw
+              : clab.align === "left"  ? clab.pos[0] + clab.dx
+              : clab.pos[0] + clab.dx - clw / 2;
+      boxes.push({
+        x0: clx - 6, x1: clx + clw + 6,
+        y0: clab.pos[1] + clab.dy - 12, y1: clab.pos[1] + clab.dy + 4
+      });
+    }
+
+    /* desired spot: beside the dot (right, or left when near the edge) */
+    var callouts = views.map(function (v, i) {
+      var w = ctx.measureText(v.ref.name).width;
+      var side = (v.x + 8 + w <= W - 6) ? 1 : -1;
+      return {
+        i: i, v: v, name: v.ref.name, w: w, side: side,
+        lx: side > 0 ? v.x + 8 : v.x - 8 - w,
+        ly: v.y - 5, base: v.y - 5
+      };
+    });
+    callouts.sort(function (a, b) { return a.ly - b.ly; });
+
+    /* standoff pass: walk top → bottom, push down on any overlap */
+    callouts.forEach(function (co) {
+      for (var it = 0; it < 5; it++) {
+        if (co.ly < 2) co.ly = 2;
+        if (co.ly > H - LH - 2) co.ly = H - LH - 2;
+        var pushed = null;
+        for (var b = 0; b < boxes.length; b++) {
+          var bx = boxes[b];
+          if (co.lx - LP < bx.x1 && co.lx + co.w + LP > bx.x0 &&
+              co.ly < bx.y1 && co.ly + LH > bx.y0) {
+            co.ly = bx.y1 + LP;
+            pushed = bx;
+          }
+        }
+        if (!pushed) break;
+      }
+      co.displaced = Math.abs(co.ly - co.base) > 1;
+      boxes.push({ x0: co.lx - LP, x1: co.lx + co.w + LP, y0: co.ly, y1: co.ly + LH });
+    });
+
+    /* leaders first, text on top — only moved labels get a leader */
+    callouts.forEach(function (co) {
+      var isActive = co.i === active;
+      var baseline = co.ly + 9, midY = baseline - 3.5;
+      if (co.displaced) {
+        var ax = co.side > 0 ? co.lx - 3 : co.lx + co.w + 3;
+        var sdx = ax - co.v.x, sdy = midY - co.v.y;
+        var len = Math.sqrt(sdx * sdx + sdy * sdy) || 1;
+        var r = 4 + 3.2 * co.v.ref.maxAxis;
+        ctx.strokeStyle = rgba(co.v.ref.col, isActive ? 0.85 : 0.40);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(co.v.x + sdx / len * (r + 1.5), co.v.y + sdy / len * (r + 1.5));
+        ctx.lineTo(ax, midY);
+        ctx.stroke();
+      }
+      var aL = (0.45 + 0.40 * co.v.ref.maxAxis) * (active > -1 && !isActive ? 0.35 : 1);
+      if (isActive) aL = Math.min(1, aL + 0.25);
+      ctx.fillStyle = "rgba(" + FG + ", " + Math.min(1, aL).toFixed(3) + ")";
+      ctx.textAlign = "left";
+      ctx.fillText(co.name, co.lx, baseline);
+    });
 
     /* highlight ring — card hover (linkHover) wins over pointer hover */
-    var active = linkHover > -1 ? linkHover : hover;
     if (active > -1) {
       var av = views[active];
       var ac = av.ref.col;
