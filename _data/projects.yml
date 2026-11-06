@@ -1,54 +1,64 @@
 # tags: SW (software) · EL (electrical) · MEC (mechanical)
-#
-# FT8-Hunter sits in the Software + Electrical overlap (weak-signal digital
-# radio). Every other entry here keeps the pillar placement from the old
-# homepage's venn diagram.
+# plot: [SW, EL, MEC] rough strengths for the 3D cube plot (0..1 per axis).
+# These are the values the pillar tags imply — edit to taste and the plot
+# follows.
 
 - name: FT8-Hunter
   url: https://github.com/TheBengineer/FT8-Hunter
   tags: [SW, EL]
+  plot: [0.84, 0.82, 0.05]
   blurb: Ham radio reporting software that connects to a radio
 
 - name: SonicMesh
   url: https://sonicmesh.thebengineer.net/
   source: https://github.com/TheBengineer/SonicMesh
   tags: [SW, EL]
+  plot: [0.72, 0.62, 0.05]
 
 - name: Bridge Tester
   url: https://github.com/TheBengineer/Bridge-Tester
   tags: [SW, EL, MEC]
+  plot: [0.58, 0.55, 0.80]
   blurb: Popsicle-stick bridge tester for competitions
 
 - name: BottleWarmer
   url: https://github.com/TheBengineer/BottleWarmer
   tags: [SW, EL, MEC]
+  plot: [0.52, 0.58, 0.60]
   blurb: Crockpot-hacked baby-formula warmer
 
 - name: Nix Dependency Visualizer
   url: https://github.com/TheBengineer/nix-dependency-visualizer
   tags: [SW]
+  plot: [0.95, 0.05, 0.05]
 
 - name: Google Music Extractor
   url: https://github.com/TheBengineer/GmusicExport
   tags: [SW]
+  plot: [0.80, 0.05, 0.05]
 
 - name: VT100 Emulator
   url: https://github.com/TheBengineer/PyVT100
   tags: [SW]
+  plot: [0.66, 0.05, 0.05]
 
 - name: SmartFounders.io
   url: http://app.smartfounders.io/
   tags: [SW]
+  plot: [0.50, 0.05, 0.05]
 
 - name: MeshHardware
   url: https://meshhardware.thebengineer.net/
   tags: [SW]
+  plot: [0.68, 0.18, 0.12]
 
 - name: TypeTeacher
   url: https://typer.thebengineer.net/
   tags: [SW]
+  plot: [0.40, 0.05, 0.05]
 
 - name: 1993 Jeep Wrangler Rebuild
   url: https://imgur.com/a/cPtIk
   tags: [MEC]
+  plot: [0.05, 0.05, 0.95]
   blurb: Restoration photo gallery

@@ -93,6 +93,28 @@ a { color: var(--el); }
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
 }
 
+/* Pillar plot -------------------------------------------------------- */
+.plot-wrap { margin: 1.25rem auto 0; max-width: 480px; }
+.plot-canvas {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-raised);
+  cursor: grab; touch-action: none;
+}
+.plot-legend {
+  margin: .7rem auto 0; max-width: 480px;
+  display: flex; align-items: center; justify-content: center; gap: .9rem; flex-wrap: wrap;
+  font-family: var(--mono); font-size: .72rem; color: var(--muted);
+}
+.key { display: inline-flex; align-items: center; gap: .35rem; }
+.dot { width: .55rem; height: .55rem; border-radius: 50%; display: inline-block; }
+.dot-sw { background: var(--sw); }
+.dot-el { background: var(--el); }
+.dot-mec { background: var(--mec); }
+.plot-note { text-align: center; color: var(--muted); font-family: var(--mono); font-size: .8rem; }
+.plot-btn { padding: .25rem .8rem; font-size: .72rem; }
+.hint { opacity: .8; }
+
 /* Venn / pillars ---------------------------------------------------- */
 .venn-wrap { margin: 1.25rem auto 0; max-width: 560px; }
 .venn { width: 100%; height: auto; display: block; }

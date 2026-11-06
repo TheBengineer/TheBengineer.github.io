@@ -1,0 +1,32 @@
+<section class="pillars" id="pillars">
+  <h2 class="section-title">Pillars</h2>
+
+  <div class="plot-wrap">
+    <canvas id="plot-canvas" class="plot-canvas" role="img"
+            aria-label="3D plot of projects along the software, electrical, and mechanical axes, slowly spinning"></canvas>
+  </div>
+
+  <div class="plot-legend">
+    <span class="key"><span class="dot dot-sw"></span>SW (x)</span>
+    <span class="key"><span class="dot dot-el"></span>EL (y)</span>
+    <span class="key"><span class="dot dot-mec"></span>MEC (z)</span>
+    <span class="hint">drag to rotate · click a point</span>
+    <button id="plot-toggle" class="btn ghost plot-btn" type="button">pause</button>
+  </div>
+
+  <noscript>
+    <p class="plot-note">JavaScript is off — showing the static venn diagram instead.</p>
+    {% include venn.html %}
+  </noscript>
+</section>
+
+<script>
+window.PLOT_POINTS = [
+{%- for p in site.data.projects -%}
+{%- if p.plot -%}
+  { n: {{ p.name | jsonify }}, u: {% if p.url %}{{ p.url | jsonify }}{% else %}null{% endif %}, p: {{ p.plot | jsonify }} }{% unless forloop.last %},{% endunless %}
+{%- endif -%}
+{%- endfor -%}
+];
+</script>
+<script src="{{ '/assets/js/plot.js' | relative_url }}" defer></script>
