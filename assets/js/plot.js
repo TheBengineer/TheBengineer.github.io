@@ -21,11 +21,11 @@
 
   var INSET = 0.88;                    // keep points just inside the faces
   var APPROACH = {
-    pitch: -0.40,                      // resting tilt (rad)
-    spin: 0.28,                        // rad / second
+    pitch: 0.42,                       // resting tilt (rad) — camera above the equator
+    spin: 0.11,                        // rad / second — slow drift (full turn ≈ 57 s)
     drag: 0.0068                       // rad per pixel of drag
   };
-  var PITCH_MIN = -1.25, PITCH_MAX = 0.45;
+  var PITCH_MIN = -0.55, PITCH_MAX = 1.15;
 
   var W = 0, H = 0, dpr = 1;
   var yaw = 0.65, pitch = APPROACH.pitch;
@@ -36,7 +36,10 @@
 
   var dragging = false, moved = 0, lastX = 0, lastY = 0;
   var mouse = { x: -1, y: -1 };
-  var hover = -1;
+  var hover = -1;              // index under the pointer (canvas-side)
+  var linkHover = -1;          // index flagged from the project cards
+  var lastHover = -1;          // last hover index applied to the cards
+  var cardEls = [];
 
   /* ---------- data ---------- */
 
@@ -259,14 +262,48 @@
         hover = h;
       }
     }
-    if (hover > -1) {
-      var hv = views[hover];
-      var hp = hv.ref;
-      ctx.strokeStyle = rgba(hp.col, 0.9);
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.arc(hv.x, hv.y, 12, 0, Math.PI * 2);
-      ctx.stroke();
+    /* labels — right of each dot, flipped to the left near the edge */
+    for (var l = 0; l < views.length; l++) {
+      var lv = views[l], lp = lv.ref;
+      var nearL = (lv.d - 0.7) / 0.65;
+      var alphaL = 0.22 + 0.66 * nearL;
+      ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+      var labelX = lv.x + 8;
+      ctx.textAlign = "left";
+      if (labelX + ctx.measureText(lp.name).width > W - 6) {
+        ctx.textAlign = "right";
+        labelX = lv.x - 8;
+      }
+      ctx.fillStyle = "rgba(" + FG + ", " + alphaL.toFixed(3) + ")";
+      ctx.fillText(lp.name, labelX, lv.y + 3.5);
+    }
+
+    /* highlight ring — card hover (linkHover) wins over pointer hover */
+    var active = linkHover > -1 ? linkHover : hover;
+    if (active > -1) {
+      var activeView = null;
+      for (var av = 0; av < views.length; av++) {
+        if (views[av].ref === pts[active]) { activeView = views[av]; break; }
+      }
+      if (activeView) {
+        var ac = activeView.ref.col;
+        ctx.fillStyle = rgba(ac, 0.10);
+        ctx.beginPath();
+        ctx.arc(activeView.x, activeView.y, 20, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = rgba(ac, 0.95);
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(activeView.x, activeView.y, 12, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    /* converse: pointer on the graph highlights the matching card */
+    if (hover !== lastHover) {
+      if (lastHover > -1 && cardEls[lastHover]) cardEls[lastHover].classList.remove("is-hot");
+      if (hover > -1 && cardEls[hover]) cardEls[hover].classList.add("is-hot");
+      lastHover = hover;
     }
 
     /* tooltip */
@@ -336,6 +373,20 @@
       setLbl();
     });
   }
+
+  /* card ⇄ graph linkage — hover/focus either side, highlight both */
+  function bindCards() {
+    cardEls = Array.prototype.slice.call(document.querySelectorAll(".project-grid .project"));
+    cardEls.forEach(function (el) {
+      var i = parseInt(el.getAttribute("data-index"), 10);
+      if (isNaN(i) || i < 0 || i >= pts.length) i = cardEls.indexOf(el);
+      el.addEventListener("pointerenter", function () { linkHover = i; });
+      el.addEventListener("pointerleave", function () { if (linkHover === i) linkHover = -1; });
+      el.addEventListener("focusin", function () { linkHover = i; });
+      el.addEventListener("focusout", function () { if (linkHover === i) linkHover = -1; });
+    });
+  }
+  bindCards();
 
   /* ---------- loop ---------- */
 

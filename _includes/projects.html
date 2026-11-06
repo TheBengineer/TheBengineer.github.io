@@ -3,7 +3,7 @@
 
   <ul class="project-grid">
     {% for p in site.data.projects %}
-    <li class="project">
+    <li class="project" data-index="{{ forloop.index0 }}">
       <div class="badges">
         {%- for t in p.tags -%}
         <span class="badge badge-{{ t | downcase }}">{{ t }}</span>

@@ -153,6 +153,12 @@ a { color: var(--el); }
 .project h3 a:hover { text-decoration: underline; text-decoration-color: var(--el); }
 .source { font-family: var(--mono); font-size: .7rem; color: var(--muted); margin-left: .35rem; text-decoration: none; }
 .source:hover { color: var(--el); }
+.project.is-hot {
+  border-color: var(--el);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgb(126 231 135 / .10);
+}
+.project:focus-within { border-color: var(--el); }
 .blurb { margin: 0; font-size: .85rem; color: var(--muted); }
 
 /* Footer ----------------------------------------------------------------- */
