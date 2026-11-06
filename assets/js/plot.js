@@ -27,6 +27,7 @@
   var lastHover = -1;          // last hover index applied to the cards
   var cardEls = [];
   var layout = null;           // force-layout state, one node per label
+  var settled = false;         // true once layout froze at steady state
 
   /* ---------- helpers ---------- */
 
@@ -79,6 +80,7 @@
     canvas.height = Math.round(side * dpr);
     W = side; H = side;
     layout = null;               // dots move → rebuild the force layout
+    settled = false;
   }
   fit();
   window.addEventListener("resize", fit);
@@ -116,11 +118,11 @@
     ];
   }
 
-  /* corner labels: SW top, EL bottom-right, MEC bottom-left */
+  /* corner labels: Software top, Electrical bottom-right, Mechanical bottom-left */
   var CORNER_LABEL = [
-    { pos: A, dx: 0, dy: -10, align: "center" },
-    { pos: B, dx: -4, dy: 20, align: "right" },
-    { pos: C, dx: 4, dy: 20, align: "left" }
+    { name: "Software",   pos: A, dx: 0,  dy: -10, align: "center" },
+    { name: "Electrical", pos: B, dx: -4, dy: 20,  align: "right" },
+    { name: "Mechanical", pos: C, dx: 4,  dy: 20,  align: "left" }
   ];
 
   /* ---------- drawing ---------- */
@@ -181,10 +183,10 @@
       ctx.fillRect(-46, -46, 92, 92);
       ctx.restore();
 
-      ctx.font = "600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+      ctx.font = "600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
       ctx.textAlign = CORNER_LABEL[i].align;
       ctx.fillStyle = rgba(cc, 0.95);
-      ctx.fillText(AXIS[i].toUpperCase(), pos[0] + CORNER_LABEL[i].dx, pos[1] + CORNER_LABEL[i].dy);
+      ctx.fillText(CORNER_LABEL[i].name, pos[0] + CORNER_LABEL[i].dx, pos[1] + CORNER_LABEL[i].dy);
     }
 
     /* project points */
@@ -235,43 +237,52 @@
        its dot by a leader line; nodes ease toward an anchor beside their
        dot, labels repel each other, so they settle overlap-free. */
     ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
-    var LH = 12, LP = 2;
+    var LH = 12, LP = 4;
     /* severe damping: each pass aims a hard correction, applies a fraction */
     var DAMP = 0.42;
 
-    /* corner labels are static no-go zones */
+    /* corner labels are static no-go zones (measure in their own font) */
+    ctx.font = "600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
     var nogo = [];
     for (var cl = 0; cl < 3; cl++) {
       var clab = CORNER_LABEL[cl];
-      var clw = ctx.measureText(AXIS[cl].toUpperCase()).width;
+      var clw = ctx.measureText(clab.name).width;
       var clx = clab.align === "right" ? clab.pos[0] + clab.dx - clw
               : clab.align === "left"  ? clab.pos[0] + clab.dx
               : clab.pos[0] + clab.dx - clw / 2;
       nogo.push({
-        x0: clx - 6, x1: clx + clw + 6,
-        y0: clab.pos[1] + clab.dy - 12, y1: clab.pos[1] + clab.dy + 4
+        x0: clx - 8, x1: clx + clw + 8,
+        y0: clab.pos[1] + clab.dy - 13, y1: clab.pos[1] + clab.dy + 5
       });
     }
+    ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
     /* persistent node state — reinitialized on resize */
     if (!layout || layout.length !== views.length) {
       layout = views.map(function (v) {
         var w = ctx.measureText(v.ref.name).width;
-        var side = (v.x + 8 + w <= W - 6) ? 1 : -1;
+        var side = (v.x + 10 + w <= W - 6) ? 1 : -1;
         return {
           w: w, side: side,
-          ax: side > 0 ? 8 : -8 - w,     /* anchor offset from dot x */
-          x: v.x + (side > 0 ? 8 : -8 - w),
+          ax: side > 0 ? 10 : -10 - w,   /* anchor offset from dot x */
+          x: v.x + (side > 0 ? 10 : -10 - w),
           y: v.y - 5
         };
       });
+      settled = false;
     }
 
-    /* relaxation: tether pull + pairwise repulsion + clamps */
+    /* relaxation: tether pull + pairwise repulsion + clamps.
+       Runs only until the layout reaches steady state (per-iteration
+       movement below a pixel epsilon), then freezes — later frames
+       reuse the frozen positions and only hover dimming updates. */
+    if (!settled) {
+    var maxMove = 0;
     for (var it = 0; it < 6; it++) {
       /* tether: ease toward the spot beside the dot */
       for (var s1 = 0; s1 < layout.length; s1++) {
         var st = layout[s1], sv = views[s1];
+        st.px = st.x; st.py = st.y;
         st.x += (sv.x + st.ax - st.x) * 0.22;
         st.y += (sv.y - 5 - st.y) * 0.22;
       }
@@ -313,7 +324,7 @@
         /* keep clear of every plotted point (circle vs label rect) */
         for (var dn = 0; dn < views.length; dn++) {
           var dv = views[dn];
-          var dr = 4 + 3.2 * dv.ref.maxAxis + 2.5;   // dot radius + margin
+          var dr = 4 + 3.2 * dv.ref.maxAxis + 4;     // dot radius + margin
           var nx = Math.max(st2.x, Math.min(dv.x, st2.x + st2.w));
           var ny = Math.max(st2.y, Math.min(dv.y, st2.y + LH));
           var ddx = dv.x - nx, ddy = dv.y - ny;
@@ -339,8 +350,14 @@
         if (st2.x > W - st2.w - 4) st2.x = W - st2.w - 4;
         if (st2.y < 2) st2.y = 2;
         if (st2.y > H - LH - 2) st2.y = H - LH - 2;
+        /* how far did this label travel this iteration? */
+        var move = Math.max(Math.abs(st2.x - st2.px), Math.abs(st2.y - st2.py));
+        if (move > maxMove) maxMove = move;
       }
     }
+    /* steady state reached → stop relaxing, freeze the layout */
+    settled = maxMove < 0.05;
+    } /* !settled */
 
     /* leaders (tethers) first, labels on top */
     for (var s3 = 0; s3 < layout.length; s3++) {
