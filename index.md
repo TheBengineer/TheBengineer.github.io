@@ -12,6 +12,7 @@ Usage: thebengineer [OPTION...] PROJECT
 Examples:
 
 $ ./thebengineer -s -e SonicMesh
+$ ./thebengineer -s -e FT8_Hunter
 $ ./thebengineer -s -e -m Bridge_Tester
 $ ./thebengineer -s Google_Music_Extractor
 $ ./thebengineer -s --help SmartFounders.io
@@ -60,7 +61,11 @@ $ ./thebengineer -s --help SmartFounders.io
     <span></span>
     <span></span>
     <h3>SW + EL</h3>
-    <p><a href="https://sonicmesh.thebengineer.net/">SonicMesh</a> (<a href="https://github.com/TheBengineer/SonicMesh">code</a>)</p>
+    <p>
+      <a href="https://sonicmesh.thebengineer.net/">SonicMesh</a> (<a href="https://github.com/TheBengineer/SonicMesh">code</a>)
+      <br>
+      <a href="https://github.com/TheBengineer/FT8-Hunter">FT8-Hunter</a>
+    </p>
   </div>
   <div class="shape onethree">
     <span></span>
