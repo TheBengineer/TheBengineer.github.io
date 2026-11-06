@@ -247,6 +247,7 @@
        Natural freq wn = sqrt(k); friction c = 1 - VEL_KEEP; zeta = c/(2*wn).
        With TETHER=0.030, VEL_KEEP=0.58: wn~0.17, zeta~1.2 → overdamped. */
     var TETHER = 0.030;   /* tether spring stiffness (low → low wn) */
+    var ANCHOR_GAP = 50;  /* tether rest length: px from dot to label (~5× the old 10) */
     var REPEL  = 0.055;   /* label↔label overlap stiffness */
     var DOTK   = 0.055;   /* label↔dot avoidance stiffness */
     var NOGOK  = 0.055;   /* label↔corner-label stiffness */
@@ -277,12 +278,12 @@
     if (!layout || layout.length !== views.length) {
       layout = views.map(function (v) {
         var w = ctx.measureText(v.ref.name).width;
-        var side = (v.x + 10 + w <= W - 6) ? 1 : -1;
+        var side = (v.x + ANCHOR_GAP + w <= W - 6) ? 1 : -1;
         var detune = 0.85 + 0.30 * ((hash(v.ref.name) % 100) / 100);
         return {
           w: w, side: side,
-          ax: side > 0 ? 10 : -10 - w,   /* anchor offset from dot x */
-          x: v.x + (side > 0 ? 10 : -10 - w),
+          ax: side > 0 ? ANCHOR_GAP : -ANCHOR_GAP - w,   /* anchor offset from dot x */
+          x: v.x + (side > 0 ? ANCHOR_GAP : -ANCHOR_GAP - w),
           y: v.y - 5,
           vx: 0, vy: 0, fx: 0, fy: 0,
           k: TETHER * detune
