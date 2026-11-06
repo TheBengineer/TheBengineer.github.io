@@ -1,28 +1,64 @@
 <section class="projects" id="projects">
   <h2 class="section-title">Projects</h2>
 
+  <div class="filters" role="group" aria-label="Filter projects by pillar">
+    <button class="pill is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="pill" type="button" data-filter="sw" aria-pressed="false">Software</button>
+    <button class="pill" type="button" data-filter="el" aria-pressed="false">Electrical</button>
+    <button class="pill" type="button" data-filter="mec" aria-pressed="false">Mechanical</button>
+  </div>
+
   <ul class="project-grid">
     {% for p in site.data.projects %}
-    <li class="project" data-index="{{ forloop.index0 }}">
+    <li class="project" data-index="{{ forloop.index0 }}" data-tags="{{ p.tags | join: ',' | downcase }}">
       <div class="badges">
         {%- for t in p.tags -%}
         <span class="badge badge-{{ t | downcase }}">{{ t }}</span>
         {%- endfor -%}
+        {%- if p.lang %}<span class="lang">{{ p.lang }}</span>{%- endif -%}
       </div>
       <h3>
         {%- if p.url -%}
-        <a href="{{ p.url }}" rel="noopener">{{ p.name }}</a>
+        <a class="stretched" href="{{ p.url }}" rel="noopener">{{ p.name }}</a>
         {%- else -%}
         {{ p.name }}
-        {%- endif -%}
-        {%- if p.source -%}
-        <a class="source" href="{{ p.source }}">[source]</a>
         {%- endif -%}
       </h3>
       {%- if p.blurb -%}
       <p class="blurb">{{ p.blurb }}</p>
       {%- endif -%}
+      <p class="ctas">
+        {%- if p.url -%}
+        <a href="{{ p.url }}" rel="noopener">{% if p.url contains 'github.com' %}View code ↗{% else %}Visit site ↗{% endif %}</a>
+        {%- endif -%}
+        {%- if p.source -%}
+        <a href="{{ p.source }}" rel="noopener">Code ↗</a>
+        {%- endif -%}
+      </p>
     </li>
     {% endfor %}
   </ul>
+
+  <p class="empty" hidden>No projects in this pillar yet.</p>
 </section>
+
+<script>
+(function () {
+  var pills = document.querySelectorAll(".pill");
+  var cards = document.querySelectorAll(".project-grid .project");
+  var empty = document.querySelector(".empty");
+  pills.forEach(function (pill) {
+    pill.addEventListener("click", function () {
+      pills.forEach(function (q) { q.classList.toggle("is-active", q === pill); q.setAttribute("aria-pressed", q === pill ? "true" : "false"); });
+      var f = pill.getAttribute("data-filter");
+      var any = false;
+      cards.forEach(function (card) {
+        var show = f === "all" || card.getAttribute("data-tags").split(",").indexOf(f) > -1;
+        card.hidden = !show;
+        if (show) any = true;
+      });
+      empty.hidden = any;
+    });
+  });
+})();
+</script>
