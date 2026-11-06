@@ -11,6 +11,7 @@ Usage: thebengineer [OPTION...] PROJECT
 
 Examples:
 
+$ ./thebengineer -s -e SonicMesh
 $ ./thebengineer -s -e -m Bridge_Tester
 $ ./thebengineer -s Google_Music_Extractor
 $ ./thebengineer -s --help SmartFounders.io
@@ -59,7 +60,7 @@ $ ./thebengineer -s --help SmartFounders.io
     <span></span>
     <span></span>
     <h3>SW + EL</h3>
-    <p></p>
+    <p><a href="https://sonicmesh.thebengineer.net/">SonicMesh</a> (<a href="https://github.com/TheBengineer/SonicMesh">code</a>)</p>
   </div>
   <div class="shape onethree">
     <span></span>
