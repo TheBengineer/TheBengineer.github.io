@@ -1,0 +1,54 @@
+# tags: SW (software) · EL (electrical) · MEC (mechanical)
+#
+# FT8-Hunter sits in the Software + Electrical overlap (weak-signal digital
+# radio). Every other entry here keeps the pillar placement from the old
+# homepage's venn diagram.
+
+- name: FT8-Hunter
+  url: https://github.com/TheBengineer/FT8-Hunter
+  tags: [SW, EL]
+  blurb: Ham radio reporting software that connects to a radio
+
+- name: SonicMesh
+  url: https://sonicmesh.thebengineer.net/
+  source: https://github.com/TheBengineer/SonicMesh
+  tags: [SW, EL]
+
+- name: Bridge Tester
+  url: https://github.com/TheBengineer/Bridge-Tester
+  tags: [SW, EL, MEC]
+  blurb: Popsicle-stick bridge tester for competitions
+
+- name: BottleWarmer
+  url: https://github.com/TheBengineer/BottleWarmer
+  tags: [SW, EL, MEC]
+  blurb: Crockpot-hacked baby-formula warmer
+
+- name: Nix Dependency Visualizer
+  url: https://github.com/TheBengineer/nix-dependency-visualizer
+  tags: [SW]
+
+- name: Google Music Extractor
+  url: https://github.com/TheBengineer/GmusicExport
+  tags: [SW]
+
+- name: VT100 Emulator
+  url: https://github.com/TheBengineer/PyVT100
+  tags: [SW]
+
+- name: SmartFounders.io
+  url: http://app.smartfounders.io/
+  tags: [SW]
+
+- name: MeshHardware
+  url: https://meshhardware.thebengineer.net/
+  tags: [SW]
+
+- name: TypeTeacher
+  url: https://typer.thebengineer.net/
+  tags: [SW]
+
+- name: 1993 Jeep Wrangler Rebuild
+  url: https://imgur.com/a/cPtIk
+  tags: [MEC]
+  blurb: Restoration photo gallery

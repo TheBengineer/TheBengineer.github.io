@@ -1,0 +1,28 @@
+<section class="projects" id="projects">
+  <h2 class="section-title">Projects</h2>
+
+  <ul class="project-grid">
+    {% for p in site.data.projects %}
+    <li class="project">
+      <div class="badges">
+        {%- for t in p.tags -%}
+        <span class="badge badge-{{ t | downcase }}">{{ t }}</span>
+        {%- endfor -%}
+      </div>
+      <h3>
+        {%- if p.url -%}
+        <a href="{{ p.url }}" rel="noopener">{{ p.name }}</a>
+        {%- else -%}
+        {{ p.name }}
+        {%- endif -%}
+        {%- if p.source -%}
+        <a class="source" href="{{ p.source }}">[source]</a>
+        {%- endif -%}
+      </h3>
+      {%- if p.blurb -%}
+      <p class="blurb">{{ p.blurb }}</p>
+      {%- endif -%}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
