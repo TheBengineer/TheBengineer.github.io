@@ -308,6 +308,31 @@
             }
           }
         }
+        /* keep clear of every plotted point (circle vs label rect) */
+        for (var dn = 0; dn < views.length; dn++) {
+          var dv = views[dn];
+          var dr = 4 + 3.2 * dv.ref.maxAxis + 2.5;   // dot radius + margin
+          var nx = Math.max(st2.x, Math.min(dv.x, st2.x + st2.w));
+          var ny = Math.max(st2.y, Math.min(dv.y, st2.y + LH));
+          var ddx = dv.x - nx, ddy = dv.y - ny;
+          var dd = Math.sqrt(ddx * ddx + ddy * ddy);
+          if (dd < dr) {
+            if (dd > 0.01) {
+              /* dot under an edge/corner — back the label away along the normal */
+              st2.x -= ddx / dd * (dr - dd);
+              st2.y -= ddy / dd * (dr - dd);
+            } else {
+              /* dot center inside the label — pop out via the nearest edge */
+              var mX = Math.min(dv.x - st2.x, st2.x + st2.w - dv.x);
+              var mY = Math.min(dv.y - st2.y, st2.y + LH - dv.y);
+              if (mX < mY) {
+                st2.x = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr : dv.x + dr;
+              } else {
+                st2.y = dv.y < st2.y + LH / 2 ? dv.y - LH - dr : dv.y + dr;
+              }
+            }
+          }
+        }
         if (st2.x < 4) st2.x = 4;
         if (st2.x > W - st2.w - 4) st2.x = W - st2.w - 4;
         if (st2.y < 2) st2.y = 2;
