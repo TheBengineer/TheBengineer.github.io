@@ -26,6 +26,8 @@
   var linkHover = -1;          // index flagged from the project cards
   var lastHover = -1;          // last hover index applied to the cards
   var cardEls = [];
+  var layout = null;           // force-layout state, one node per label
+  var settled = false;         // true once layout froze at steady state
 
   /* ---------- helpers ---------- */
 
@@ -77,6 +79,8 @@
     canvas.width = Math.round(side * dpr);
     canvas.height = Math.round(side * dpr);
     W = side; H = side;
+    layout = null;               // dots move → rebuild the force layout
+    settled = false;
   }
   fit();
   window.addEventListener("resize", fit);
@@ -228,6 +232,188 @@
       }
     }
     var active = linkHover > -1 ? linkHover : hover;
+
+    /* labels — force-directed callouts. Each label is a node tethered to
+       its dot by a leader line; nodes ease toward an anchor beside their
+       dot, labels repel each other, so they settle overlap-free. */
+    ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+    var LH = 12, LP = 4;
+    /* Overdamped velocity dynamics — deliberately NOT a positional-kick
+       solver. Positional kicks put the system at its natural frequency
+       (every pass teleports, then the spring teleports back), which rings.
+       Here forces are accelerations, each mass carries velocity with
+       friction, and the system runs well below resonance with damping
+       ratio > 1 (overdamped), so oscillations cannot be sustained.
+       Natural freq wn = sqrt(k); friction c = 1 - VEL_KEEP; zeta = c/(2*wn).
+       With TETHER=0.030, VEL_KEEP=0.58: wn~0.17, zeta~1.2 → overdamped. */
+    var TETHER = 0.030;   /* tether spring stiffness (low → low wn) */
+    var ANCHOR_GAP = 50;  /* tether rest length: px from dot to label (~5× the old 10) */
+    var REPEL  = 0.055;   /* label↔label overlap stiffness */
+    var DOTK   = 0.055;   /* label↔dot avoidance stiffness */
+    var NOGOK  = 0.055;   /* label↔corner-label stiffness */
+    var VEL_KEEP = 0.58;  /* velocity retained per substep (42% friction) */
+    var VMAX = 2.2;       /* max px/substep — prevents pop-throughs */
+    var SUBSTEPS = 8;     /* physics substeps per rendered frame */
+    var SETTLE_EPS = 0.02;
+
+    /* corner labels are static no-go zones (measure in their own font) */
+    ctx.font = "600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+    var nogo = [];
+    for (var cl = 0; cl < 3; cl++) {
+      var clab = CORNER_LABEL[cl];
+      var clw = ctx.measureText(clab.name).width;
+      var clx = clab.align === "right" ? clab.pos[0] + clab.dx - clw
+              : clab.align === "left"  ? clab.pos[0] + clab.dx
+              : clab.pos[0] + clab.dx - clw / 2;
+      nogo.push({
+        x0: clx - 8, x1: clx + clw + 8,
+        y0: clab.pos[1] + clab.dy - 13, y1: clab.pos[1] + clab.dy + 5
+      });
+    }
+    ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+
+    /* persistent node state — reinitialized on resize.
+       vx/vy carry momentum; k is detuned per node (±15%) so no single
+       natural frequency can lock the whole cluster into one mode. */
+    if (!layout || layout.length !== views.length) {
+      layout = views.map(function (v) {
+        var w = ctx.measureText(v.ref.name).width;
+        var side = (v.x + ANCHOR_GAP + w <= W - 6) ? 1 : -1;
+        var detune = 0.85 + 0.30 * ((hash(v.ref.name) % 100) / 100);
+        return {
+          w: w, side: side,
+          ax: side > 0 ? ANCHOR_GAP : -ANCHOR_GAP - w,   /* anchor offset from dot x */
+          x: v.x + (side > 0 ? ANCHOR_GAP : -ANCHOR_GAP - w),
+          y: v.y - 5,
+          vx: 0, vy: 0, fx: 0, fy: 0,
+          k: TETHER * detune
+        };
+      });
+      settled = false;
+    }
+
+    /* Overdamped integration: spring + repulsion + avoidance are forces
+       (accelerations). Integrate: v = v*VEL_KEEP + f; pos += v.
+       Friction bleeds energy every substep, so the system decays
+       monotonically to steady state instead of oscillating at wn.
+       Substep rate runs well below the frame rate (wn << 1/dt). */
+    if (!settled) {
+    var maxSpeed = 0;
+    for (var it = 0; it < SUBSTEPS; it++) {
+      maxSpeed = 0;
+      /* tether springs → forces (Jacobi: from start-of-substep state) */
+      for (var s1 = 0; s1 < layout.length; s1++) {
+        var st = layout[s1], sv = views[s1];
+        st.fx = (sv.x + st.ax - st.x) * st.k;
+        st.fy = (sv.y - 5 - st.y) * st.k;
+      }
+      /* label↔label repulsion → forces along the thinnest overlap axis */
+      for (var pp = 0; pp < layout.length; pp++) {
+        for (var qq = pp + 1; qq < layout.length; qq++) {
+          var la = layout[pp], lb = layout[qq];
+          var ox = Math.min(la.x + la.w + LP, lb.x + lb.w + LP) - Math.max(la.x - LP, lb.x - LP);
+          var oy = Math.min(la.y + LH + LP, lb.y + LH + LP) - Math.max(la.y - LP, lb.y - LP);
+          if (ox > 0 && oy > 0) {
+            if (ox < oy) {
+              var dir = (la.x + la.w / 2) < (lb.x + lb.w / 2) ? -1 : 1;
+              var frx = REPEL * ox;
+              la.fx += dir * frx;
+              lb.fx -= dir * frx;
+            } else {
+              var dirY = la.y < lb.y ? -1 : 1;
+              var fry = REPEL * oy;
+              la.fy += dirY * fry;
+              lb.fy -= dirY * fry;
+            }
+          }
+        }
+      }
+      /* corner-label + dot avoidance → forces */
+      for (var s2 = 0; s2 < layout.length; s2++) {
+        var st2 = layout[s2];
+        for (var ng = 0; ng < nogo.length; ng++) {
+          var nb = nogo[ng];
+          var nox = Math.min(st2.x + st2.w + LP, nb.x1) - Math.max(st2.x - LP, nb.x0);
+          var noy = Math.min(st2.y + LH + LP, nb.y1) - Math.max(st2.y - LP, nb.y0);
+          if (nox > 0 && noy > 0) {
+            if (nox < noy) {
+              st2.fx += (st2.x + st2.w / 2) < (nb.x0 + nb.x1) / 2 ? -nox * NOGOK : nox * NOGOK;
+            } else {
+              st2.fy += st2.y < nb.y0 ? -noy * NOGOK : noy * NOGOK;
+            }
+          }
+        }
+        for (var dn = 0; dn < views.length; dn++) {
+          var dv = views[dn];
+          var dr = 4 + 3.2 * dv.ref.maxAxis + 4;     // dot radius + margin
+          var nx = Math.max(st2.x, Math.min(dv.x, st2.x + st2.w));
+          var ny = Math.max(st2.y, Math.min(dv.y, st2.y + LH));
+          var ddx = dv.x - nx, ddy = dv.y - ny;
+          var dd = Math.sqrt(ddx * ddx + ddy * ddy);
+          if (dd < dr) {
+            if (dd > 0.01) {
+              /* dot under an edge/corner — push off along the normal */
+              st2.fx -= ddx / dd * (dr - dd) * DOTK;
+              st2.fy -= ddy / dd * (dr - dd) * DOTK;
+            } else {
+              /* dot center inside the label — force toward nearest edge */
+              var mX = Math.min(dv.x - st2.x, st2.x + st2.w - dv.x);
+              var mY = Math.min(dv.y - st2.y, st2.y + LH - dv.y);
+              if (mX < mY) {
+                var tx = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr : dv.x + dr;
+                st2.fx += (tx - st2.x) * DOTK;
+              } else {
+                var ty = dv.y < st2.y + LH / 2 ? dv.y - LH - dr : dv.y + dr;
+                st2.fy += (ty - st2.y) * DOTK;
+              }
+            }
+          }
+        }
+      }
+      /* integrate with friction; walls stop the normal velocity so
+         the boundary cannot bounce the mass back into resonance */
+      for (var s3 = 0; s3 < layout.length; s3++) {
+        var nd = layout[s3];
+        nd.vx = nd.vx * VEL_KEEP + nd.fx;
+        nd.vy = nd.vy * VEL_KEEP + nd.fy;
+        if (nd.vx > VMAX) nd.vx = VMAX;
+        if (nd.vx < -VMAX) nd.vx = -VMAX;
+        if (nd.vy > VMAX) nd.vy = VMAX;
+        if (nd.vy < -VMAX) nd.vy = -VMAX;
+        nd.x += nd.vx;
+        nd.y += nd.vy;
+        if (nd.x < 4) { nd.x = 4; nd.vx = 0; }
+        if (nd.x > W - nd.w - 4) { nd.x = W - nd.w - 4; nd.vx = 0; }
+        if (nd.y < 2) { nd.y = 2; nd.vy = 0; }
+        if (nd.y > H - LH - 2) { nd.y = H - LH - 2; nd.vy = 0; }
+        var sp = Math.max(Math.abs(nd.vx), Math.abs(nd.vy));
+        if (sp > maxSpeed) maxSpeed = sp;
+      }
+    }
+    /* steady state: velocities decayed to negligible → freeze layout */
+    settled = maxSpeed < SETTLE_EPS;
+    } /* !settled */
+
+    /* leaders (tethers) first, labels on top */
+    for (var s3 = 0; s3 < layout.length; s3++) {
+      var st3 = layout[s3], lv = views[s3], isActive = s3 === active;
+      var baseline = st3.y + 9, midY = baseline - 3.5;
+      var ax = st3.side > 0 ? st3.x - 3 : st3.x + st3.w + 3;
+      var sdx = ax - lv.x, sdy = midY - lv.y;
+      var len = Math.sqrt(sdx * sdx + sdy * sdy) || 1;
+      var r = 4 + 3.2 * lv.ref.maxAxis;
+      ctx.strokeStyle = rgba(lv.ref.col, isActive ? 0.85 : 0.40);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(lv.x + sdx / len * (r + 1.5), lv.y + sdy / len * (r + 1.5));
+      ctx.lineTo(ax, midY);
+      ctx.stroke();
+      var aL = (0.45 + 0.40 * lv.ref.maxAxis) * (active > -1 && !isActive ? 0.35 : 1);
+      if (isActive) aL = Math.min(1, aL + 0.25);
+      ctx.fillStyle = "rgba(" + FG + ", " + Math.min(1, aL).toFixed(3) + ")";
+      ctx.textAlign = "left";
+      ctx.fillText(lv.ref.name, st3.x, baseline);
+    }
 
     /* highlight ring — card hover (linkHover) wins over pointer hover */
     if (active > -1) {
