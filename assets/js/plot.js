@@ -236,6 +236,8 @@
        dot, labels repel each other, so they settle overlap-free. */
     ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
     var LH = 12, LP = 2;
+    /* severe damping: each pass aims a hard correction, applies a fraction */
+    var DAMP = 0.42;
 
     /* corner labels are static no-go zones */
     var nogo = [];
@@ -283,12 +285,12 @@
           if (ox > 0 && oy > 0) {
             if (ox < oy) {
               var dir = (la.x + la.w / 2) < (lb.x + lb.w / 2) ? -1 : 1;
-              la.x += dir * ox * 0.5;
-              lb.x -= dir * ox * 0.5;
+              la.x += dir * ox * 0.5 * DAMP;
+              lb.x -= dir * ox * 0.5 * DAMP;
             } else {
               var dirY = la.y < lb.y ? -1 : 1;
-              la.y += dirY * oy * 0.5;
-              lb.y -= dirY * oy * 0.5;
+              la.y += dirY * oy * 0.5 * DAMP;
+              lb.y -= dirY * oy * 0.5 * DAMP;
             }
           }
         }
@@ -302,9 +304,9 @@
           var noy = Math.min(st2.y + LH + LP, nb.y1) - Math.max(st2.y - LP, nb.y0);
           if (nox > 0 && noy > 0) {
             if (nox < noy) {
-              st2.x += (st2.x + st2.w / 2) < (nb.x0 + nb.x1) / 2 ? -nox : nox;
+              st2.x += (st2.x + st2.w / 2) < (nb.x0 + nb.x1) / 2 ? -nox * DAMP : nox * DAMP;
             } else {
-              st2.y += st2.y < nb.y0 ? -noy : noy;
+              st2.y += st2.y < nb.y0 ? -noy * DAMP : noy * DAMP;
             }
           }
         }
@@ -319,16 +321,16 @@
           if (dd < dr) {
             if (dd > 0.01) {
               /* dot under an edge/corner — back the label away along the normal */
-              st2.x -= ddx / dd * (dr - dd);
-              st2.y -= ddy / dd * (dr - dd);
+              st2.x -= ddx / dd * (dr - dd) * DAMP;
+              st2.y -= ddy / dd * (dr - dd) * DAMP;
             } else {
               /* dot center inside the label — pop out via the nearest edge */
               var mX = Math.min(dv.x - st2.x, st2.x + st2.w - dv.x);
               var mY = Math.min(dv.y - st2.y, st2.y + LH - dv.y);
               if (mX < mY) {
-                st2.x = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr : dv.x + dr;
+                st2.x = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr * DAMP : dv.x + dr * DAMP;
               } else {
-                st2.y = dv.y < st2.y + LH / 2 ? dv.y - LH - dr : dv.y + dr;
+                st2.y = dv.y < st2.y + LH / 2 ? dv.y - LH - dr * DAMP : dv.y + dr * DAMP;
               }
             }
           }
