@@ -238,8 +238,10 @@
        dot, labels repel each other, so they settle overlap-free. */
     ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
     var LH = 12, LP = 4;
-    /* severe damping: each pass aims a hard correction, applies a fraction */
-    var DAMP = 0.42;
+    /* heavy damping + soft springs: corrections apply as small fractions
+       so labels glide to steady state instead of ringing around it */
+    var DAMP = 0.18;
+    var TETHER = 0.09;
 
     /* corner labels are static no-go zones (measure in their own font) */
     ctx.font = "600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
@@ -283,8 +285,8 @@
       for (var s1 = 0; s1 < layout.length; s1++) {
         var st = layout[s1], sv = views[s1];
         st.px = st.x; st.py = st.y;
-        st.x += (sv.x + st.ax - st.x) * 0.22;
-        st.y += (sv.y - 5 - st.y) * 0.22;
+        st.x += (sv.x + st.ax - st.x) * TETHER;
+        st.y += (sv.y - 5 - st.y) * TETHER;
       }
       /* repulsion: separate overlapping label rectangles along the
          smallest axis */
@@ -335,13 +337,16 @@
               st2.x -= ddx / dd * (dr - dd) * DAMP;
               st2.y -= ddy / dd * (dr - dd) * DAMP;
             } else {
-              /* dot center inside the label — pop out via the nearest edge */
+              /* dot center inside the label — ease out via the nearest
+                 edge (fractional, not a hard teleport, to avoid ringing) */
               var mX = Math.min(dv.x - st2.x, st2.x + st2.w - dv.x);
               var mY = Math.min(dv.y - st2.y, st2.y + LH - dv.y);
               if (mX < mY) {
-                st2.x = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr * DAMP : dv.x + dr * DAMP;
+                var tx = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr : dv.x + dr;
+                st2.x += (tx - st2.x) * DAMP;
               } else {
-                st2.y = dv.y < st2.y + LH / 2 ? dv.y - LH - dr * DAMP : dv.y + dr * DAMP;
+                var ty = dv.y < st2.y + LH / 2 ? dv.y - LH - dr : dv.y + dr;
+                st2.y += (ty - st2.y) * DAMP;
               }
             }
           }
@@ -356,7 +361,7 @@
       }
     }
     /* steady state reached → stop relaxing, freeze the layout */
-    settled = maxMove < 0.05;
+    settled = maxMove < 0.02;
     } /* !settled */
 
     /* leaders (tethers) first, labels on top */
