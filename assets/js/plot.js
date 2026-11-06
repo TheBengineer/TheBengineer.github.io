@@ -238,10 +238,22 @@
        dot, labels repel each other, so they settle overlap-free. */
     ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
     var LH = 12, LP = 4;
-    /* heavy damping + soft springs: corrections apply as small fractions
-       so labels glide to steady state instead of ringing around it */
-    var DAMP = 0.18;
-    var TETHER = 0.09;
+    /* Overdamped velocity dynamics — deliberately NOT a positional-kick
+       solver. Positional kicks put the system at its natural frequency
+       (every pass teleports, then the spring teleports back), which rings.
+       Here forces are accelerations, each mass carries velocity with
+       friction, and the system runs well below resonance with damping
+       ratio > 1 (overdamped), so oscillations cannot be sustained.
+       Natural freq wn = sqrt(k); friction c = 1 - VEL_KEEP; zeta = c/(2*wn).
+       With TETHER=0.030, VEL_KEEP=0.58: wn~0.17, zeta~1.2 → overdamped. */
+    var TETHER = 0.030;   /* tether spring stiffness (low → low wn) */
+    var REPEL  = 0.055;   /* label↔label overlap stiffness */
+    var DOTK   = 0.055;   /* label↔dot avoidance stiffness */
+    var NOGOK  = 0.055;   /* label↔corner-label stiffness */
+    var VEL_KEEP = 0.58;  /* velocity retained per substep (42% friction) */
+    var VMAX = 2.2;       /* max px/substep — prevents pop-throughs */
+    var SUBSTEPS = 8;     /* physics substeps per rendered frame */
+    var SETTLE_EPS = 0.02;
 
     /* corner labels are static no-go zones (measure in their own font) */
     ctx.font = "600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
@@ -259,37 +271,42 @@
     }
     ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
 
-    /* persistent node state — reinitialized on resize */
+    /* persistent node state — reinitialized on resize.
+       vx/vy carry momentum; k is detuned per node (±15%) so no single
+       natural frequency can lock the whole cluster into one mode. */
     if (!layout || layout.length !== views.length) {
       layout = views.map(function (v) {
         var w = ctx.measureText(v.ref.name).width;
         var side = (v.x + 10 + w <= W - 6) ? 1 : -1;
+        var detune = 0.85 + 0.30 * ((hash(v.ref.name) % 100) / 100);
         return {
           w: w, side: side,
           ax: side > 0 ? 10 : -10 - w,   /* anchor offset from dot x */
           x: v.x + (side > 0 ? 10 : -10 - w),
-          y: v.y - 5
+          y: v.y - 5,
+          vx: 0, vy: 0, fx: 0, fy: 0,
+          k: TETHER * detune
         };
       });
       settled = false;
     }
 
-    /* relaxation: tether pull + pairwise repulsion + clamps.
-       Runs only until the layout reaches steady state (per-iteration
-       movement below a pixel epsilon), then freezes — later frames
-       reuse the frozen positions and only hover dimming updates. */
+    /* Overdamped integration: spring + repulsion + avoidance are forces
+       (accelerations). Integrate: v = v*VEL_KEEP + f; pos += v.
+       Friction bleeds energy every substep, so the system decays
+       monotonically to steady state instead of oscillating at wn.
+       Substep rate runs well below the frame rate (wn << 1/dt). */
     if (!settled) {
-    var maxMove = 0;
-    for (var it = 0; it < 6; it++) {
-      /* tether: ease toward the spot beside the dot */
+    var maxSpeed = 0;
+    for (var it = 0; it < SUBSTEPS; it++) {
+      maxSpeed = 0;
+      /* tether springs → forces (Jacobi: from start-of-substep state) */
       for (var s1 = 0; s1 < layout.length; s1++) {
         var st = layout[s1], sv = views[s1];
-        st.px = st.x; st.py = st.y;
-        st.x += (sv.x + st.ax - st.x) * TETHER;
-        st.y += (sv.y - 5 - st.y) * TETHER;
+        st.fx = (sv.x + st.ax - st.x) * st.k;
+        st.fy = (sv.y - 5 - st.y) * st.k;
       }
-      /* repulsion: separate overlapping label rectangles along the
-         smallest axis */
+      /* label↔label repulsion → forces along the thinnest overlap axis */
       for (var pp = 0; pp < layout.length; pp++) {
         for (var qq = pp + 1; qq < layout.length; qq++) {
           var la = layout[pp], lb = layout[qq];
@@ -298,17 +315,19 @@
           if (ox > 0 && oy > 0) {
             if (ox < oy) {
               var dir = (la.x + la.w / 2) < (lb.x + lb.w / 2) ? -1 : 1;
-              la.x += dir * ox * 0.5 * DAMP;
-              lb.x -= dir * ox * 0.5 * DAMP;
+              var frx = REPEL * ox;
+              la.fx += dir * frx;
+              lb.fx -= dir * frx;
             } else {
               var dirY = la.y < lb.y ? -1 : 1;
-              la.y += dirY * oy * 0.5 * DAMP;
-              lb.y -= dirY * oy * 0.5 * DAMP;
+              var fry = REPEL * oy;
+              la.fy += dirY * fry;
+              lb.fy -= dirY * fry;
             }
           }
         }
       }
-      /* keep clear of corner labels, canvas edge */
+      /* corner-label + dot avoidance → forces */
       for (var s2 = 0; s2 < layout.length; s2++) {
         var st2 = layout[s2];
         for (var ng = 0; ng < nogo.length; ng++) {
@@ -317,13 +336,12 @@
           var noy = Math.min(st2.y + LH + LP, nb.y1) - Math.max(st2.y - LP, nb.y0);
           if (nox > 0 && noy > 0) {
             if (nox < noy) {
-              st2.x += (st2.x + st2.w / 2) < (nb.x0 + nb.x1) / 2 ? -nox * DAMP : nox * DAMP;
+              st2.fx += (st2.x + st2.w / 2) < (nb.x0 + nb.x1) / 2 ? -nox * NOGOK : nox * NOGOK;
             } else {
-              st2.y += st2.y < nb.y0 ? -noy * DAMP : noy * DAMP;
+              st2.fy += st2.y < nb.y0 ? -noy * NOGOK : noy * NOGOK;
             }
           }
         }
-        /* keep clear of every plotted point (circle vs label rect) */
         for (var dn = 0; dn < views.length; dn++) {
           var dv = views[dn];
           var dr = 4 + 3.2 * dv.ref.maxAxis + 4;     // dot radius + margin
@@ -333,35 +351,46 @@
           var dd = Math.sqrt(ddx * ddx + ddy * ddy);
           if (dd < dr) {
             if (dd > 0.01) {
-              /* dot under an edge/corner — back the label away along the normal */
-              st2.x -= ddx / dd * (dr - dd) * DAMP;
-              st2.y -= ddy / dd * (dr - dd) * DAMP;
+              /* dot under an edge/corner — push off along the normal */
+              st2.fx -= ddx / dd * (dr - dd) * DOTK;
+              st2.fy -= ddy / dd * (dr - dd) * DOTK;
             } else {
-              /* dot center inside the label — ease out via the nearest
-                 edge (fractional, not a hard teleport, to avoid ringing) */
+              /* dot center inside the label — force toward nearest edge */
               var mX = Math.min(dv.x - st2.x, st2.x + st2.w - dv.x);
               var mY = Math.min(dv.y - st2.y, st2.y + LH - dv.y);
               if (mX < mY) {
                 var tx = dv.x < st2.x + st2.w / 2 ? dv.x - st2.w - dr : dv.x + dr;
-                st2.x += (tx - st2.x) * DAMP;
+                st2.fx += (tx - st2.x) * DOTK;
               } else {
                 var ty = dv.y < st2.y + LH / 2 ? dv.y - LH - dr : dv.y + dr;
-                st2.y += (ty - st2.y) * DAMP;
+                st2.fy += (ty - st2.y) * DOTK;
               }
             }
           }
         }
-        if (st2.x < 4) st2.x = 4;
-        if (st2.x > W - st2.w - 4) st2.x = W - st2.w - 4;
-        if (st2.y < 2) st2.y = 2;
-        if (st2.y > H - LH - 2) st2.y = H - LH - 2;
-        /* how far did this label travel this iteration? */
-        var move = Math.max(Math.abs(st2.x - st2.px), Math.abs(st2.y - st2.py));
-        if (move > maxMove) maxMove = move;
+      }
+      /* integrate with friction; walls stop the normal velocity so
+         the boundary cannot bounce the mass back into resonance */
+      for (var s3 = 0; s3 < layout.length; s3++) {
+        var nd = layout[s3];
+        nd.vx = nd.vx * VEL_KEEP + nd.fx;
+        nd.vy = nd.vy * VEL_KEEP + nd.fy;
+        if (nd.vx > VMAX) nd.vx = VMAX;
+        if (nd.vx < -VMAX) nd.vx = -VMAX;
+        if (nd.vy > VMAX) nd.vy = VMAX;
+        if (nd.vy < -VMAX) nd.vy = -VMAX;
+        nd.x += nd.vx;
+        nd.y += nd.vy;
+        if (nd.x < 4) { nd.x = 4; nd.vx = 0; }
+        if (nd.x > W - nd.w - 4) { nd.x = W - nd.w - 4; nd.vx = 0; }
+        if (nd.y < 2) { nd.y = 2; nd.vy = 0; }
+        if (nd.y > H - LH - 2) { nd.y = H - LH - 2; nd.vy = 0; }
+        var sp = Math.max(Math.abs(nd.vx), Math.abs(nd.vy));
+        if (sp > maxSpeed) maxSpeed = sp;
       }
     }
-    /* steady state reached → stop relaxing, freeze the layout */
-    settled = maxMove < 0.02;
+    /* steady state: velocities decayed to negligible → freeze layout */
+    settled = maxSpeed < SETTLE_EPS;
     } /* !settled */
 
     /* leaders (tethers) first, labels on top */
